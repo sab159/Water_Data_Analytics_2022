@@ -17,11 +17,14 @@ editor_options:
 
 What are the physical properties of lakes?
 
+  ANSWER: Temperature, depth, light transmission, etc. 
+
 ## Session Set Up
 ```{r, message = FALSE}
 # Check working directory (should be project file location)
 getwd()
 
+# Install packages of interest - MUST COMMENT FOR Rmd to knit!!!
 # install.packages("tidyverse")
 # install.packages("lubridate")
 # install.packages("rLakeAnalyzer")
@@ -35,7 +38,7 @@ library(rLakeAnalyzer)
 NTLdata <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv")
 
 # set ggplot theme
-theme_set(theme_classic())
+theme_set(theme_minimal())
 ```
 
 ## Data Wrangling and Exploration
@@ -89,10 +92,11 @@ max(Peterdata$sampledate)
 unique(Pauldata$depth)
 unique(Peterdata$depth)
 # Why didn't we use the "summary" function here?
+# ANSWER: does not let us see the logic of the sampling (ie. half meter increments)
 
 # QA the one data point at 20 m depth. 
 Pauldata <- Pauldata %>%
-  filter(depth < 20)
+  filter(depth < 20) #omit the anamolous data point 
 
 ```
 
