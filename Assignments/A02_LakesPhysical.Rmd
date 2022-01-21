@@ -1,6 +1,6 @@
 ---
 title: "Assignment 2: Physical Properties of Lakes"
-author: "Student Name"
+author: "Sophia Bryson"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -16,7 +16,7 @@ This exercise accompanies the lessons in Water Data Analytics on the physical pr
 2. Work through the steps, **creating code and output** that fulfill each instruction.
 3. Be sure to **answer the questions** in this assignment document.
 4. When you have completed the assignment, **Knit** the text and code into a single PDF file.
-5. After completing your assignment, fill out the assignment completion survey in Sakai. 
+5. After completing your assignment, fill out the assignment completion survey in ~~Sakai~~ Google Survey link. 
 
 Having trouble? See the assignment's answer key if you need a hint. Please try to complete the assignment without the key as much as possible - this is where the learning happens!
 
