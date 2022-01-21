@@ -20,7 +20,7 @@ This exercise accompanies the lessons in Water Data Analytics on the physical pr
 
 Having trouble? See the assignment's answer key if you need a hint. Please try to complete the assignment without the key as much as possible - this is where the learning happens!
 
-Target due date: 2022-01-25
+Target due date: 2022-02-01 (updated 20 January 2022)
 
 ## Setup
 
@@ -31,7 +31,29 @@ Target due date: 2022-01-25
 5. Set your ggplot theme (can be theme_classic or something else)
 
 ```{r}
+# Check working directory
+getwd() #should be the R project file
 
+# Load packages
+library(tidyverse)
+library(lubridate)
+library(rLakeAnalyzer)
+
+# Load dataset - NTL-LTER Physical 
+NTLdata <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv")
+
+# Data prep
+   # Format date column
+   NTLdata$sampledate <- as.Date(NTLdata$sampledate, format = "%m/%d/%y")
+
+   # Add month column
+   NTLdata <- NTLdata %>% mutate(month = month(sampledate))
+   
+   # remove temperature NAs
+   NTLdata <- NTLdata %>% drop_na(temperature_C)
+   
+# Set ggplot theme
+theme_set(theme_minimal())
 
 ```
 
@@ -42,8 +64,35 @@ Target due date: 2022-01-25
 What seasonal trends do you observe, and do these manifest differently in each lake?
 
 ```{r}
+lakes_temp <- ggplot(NTLdata, aes(x = temperature_C, y = depth, color = daynum)) +
+              scale_y_reverse() +
+              geom_point(alpha = 0.5) + 
+              scale_color_viridis_c() + 
+              labs(title = "Lake temperature profiles of NTL_LTER lakes",
+                   x = "Temperature (C)", y = "Depth (m)", color = "DOY") +
+              facet_wrap(~ lakename)
 
+lakes_temp
 
+#WRITE THIS!!!
+# OBSERVATIONS ON SEASONAL TRENDS: 
+```
+
+```{r}   
+lakes_DO <- ggplot(NTLdata, aes(x = dissolvedOxygen, y = depth, color = daynum)) +
+            scale_y_reverse() +
+            geom_point(alpha = 0.5) + 
+            scale_color_viridis_c() + 
+            labs(title = "Lake temperature profiles of NTL_LTER lakes",
+                 x = "DO", y = "Depth (m)", color = "DOY") +
+            facet_wrap(~ lakename)
+#what are the units on DO? 
+
+lakes_DO
+
+#WRITE THIS!!!
+# OBSERVATIONS ON SEASONAL TRENDS: 
+# Tuesday Lake has some WONKY values that really throw of the scaling... Paul Lake also has one.
 ```
 
 6. Create a new dataset that calculates thermocline depths for all lakes on all dates (hint: you will need group by lake, year, month, DOY, and sample date).
