@@ -38,6 +38,8 @@ getwd() #should be the R project file
 library(tidyverse)
 library(lubridate)
 library(rLakeAnalyzer)
+library(wesanderson) #fun wes anderson inspitred color palettes: 
+
 
 # Load dataset - NTL-LTER Physical 
 NTLdata <- read.csv("./Data/Raw/NTL-LTER_Lake_ChemistryPhysics_Raw.csv")
@@ -74,8 +76,6 @@ lakes_temp <- ggplot(subset(NTLdata, year4 == 1993), aes(x = temperature_C, y = 
 
 lakes_temp
 
-#WRITE THIS!!!
-# OBSERVATIONS ON SEASONAL TRENDS: 
 ```
 
 ```{r}   
@@ -86,22 +86,48 @@ lakes_DO <- ggplot(subset(NTLdata, year4 == 1993), aes(x = dissolvedOxygen, y = 
             labs(title = "Dissolved oxygen profiles of NTL-LTER lakes",
                  x = "Dissolved Oxygen (mg/L)", y = "Depth (m)", color = "DOY") +
             facet_wrap(~ lakename)
-#what are the units on DO? 
 
 lakes_DO
 
-#WRITE THIS!!!
-# OBSERVATIONS ON SEASONAL TRENDS: 
-# Tuesday Lake has some WONKY values that really throw of the scaling... Paul Lake also has one.
 ```
+Seasonal trends are evident in the temperature and dissolved oxygen profiles of the lakes throughout the year in 1993, with differences observable both within individual lakes across the seasons and between the various lakes. Temperatures overall are higher in the warmer midyear months, and stratification is most pronounced during this time. Temperatures overall are cooler in the late fall, winter, and early spring, with stratification disappearing entirely in lakes where late season measurements are reported. Trends in dissolved oxygen are similar, though DO does not go to zero when stratification gives way to mixing. The pronouncement of the deep chlorophyll later appears to decrease throughout the year as stratification weakens. 
+
 
 6. Create a new dataset that calculates thermocline depths for all lakes on all dates (hint: you will need group by lake, year, month, DOY, and sample date).
+
+```{r}
+thermocline_depths <- NTLdata %>% group_by(lakename, year4, month, daynum, sampledate) %>%
+                                  summarise(thermocline = thermo.depth(wtr = temperature_C, depths = depth, seasonal = FALSE)) %>%
+                                  filter(thermocline > 1) #drop thermoclines within 1m of surface -likely resulting from transient stratification due to solar warming. 
+```
+
 7. Plot thermocline depth by day of year for your newly made dataset. Color each point by lake name, make the points 50% transparent, and choose a color palette other than the ggplot default. 
+
+```{r}
+thermocline_plot <- ggplot(thermocline_depths, aes(x = daynum, y = thermocline, color = lakename)) + 
+                    geom_point(alpha = 0.5) +
+                    scale_color_manual(values = c(wes_palettes$Darjeeling1, wes_palettes$Darjeeling2)) + 
+                    labs(title = "Thermocline depth of LTER lakes", x = "DOY", y = "Thermocline depth (m)") 
+                    
+thermocline_plot
+```
+
 8. Create a boxplot of thermocline depth distributions split up by lake name on the x axis and by month as the fill color (hint: you will need to set Month as a factor). Choose a color palette other than the ggplot default, relabel axes and legend, and place the legend on the top of the graph.
+
+```{r}
+thermo_boxplot <- ggplot(thermocline_depths, aes(x = lakename, y = thermocline, fill = as.factor(month))) +
+                  geom_boxplot() + 
+                  scale_fill_manual(values = c(wes_palettes$Royal1, wes_palettes$Moonrise2)) + 
+                  labs(title = "Thermocline depth of LTER lakes", x = "Lake name", y = "Thermocline depth (m)", fill = "Numeric month") +
+                  theme(legend.position = "top", legend.direction = "horizontal") #how to get this aligned more nicely?? 
+
+thermo_boxplot
+```
+
 
 Do all the lakes have a similar seasonal progression of thermocline deepening? Which lakes have the deepest thermoclines, and how does this relate to their maximum depth? 
 
-```{r}
+> While the relative positions of the thermocline at different points in the year are similar across lakes (deepest in later months), the actual depth and rate of change differ between lakes and between years. The deepest thermoclines are, unsurprisingly, found in the deepest lakes, including Peter and Crampton lakes. 
 
-```
+
 
