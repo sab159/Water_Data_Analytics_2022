@@ -64,11 +64,11 @@ theme_set(theme_minimal())
 What seasonal trends do you observe, and do these manifest differently in each lake?
 
 ```{r}
-lakes_temp <- ggplot(NTLdata, aes(x = temperature_C, y = depth, color = daynum)) +
+lakes_temp <- ggplot(subset(NTLdata, year4 == 1993), aes(x = temperature_C, y = depth, color = daynum)) +
               scale_y_reverse() +
               geom_point(alpha = 0.5) + 
               scale_color_viridis_c() + 
-              labs(title = "Lake temperature profiles of NTL_LTER lakes",
+              labs(title = "Temperature profiles of NTL-LTER lakes",
                    x = "Temperature (C)", y = "Depth (m)", color = "DOY") +
               facet_wrap(~ lakename)
 
@@ -79,12 +79,12 @@ lakes_temp
 ```
 
 ```{r}   
-lakes_DO <- ggplot(NTLdata, aes(x = dissolvedOxygen, y = depth, color = daynum)) +
+lakes_DO <- ggplot(subset(NTLdata, year4 == 1993), aes(x = dissolvedOxygen, y = depth, color = daynum)) +
             scale_y_reverse() +
             geom_point(alpha = 0.5) + 
             scale_color_viridis_c() + 
-            labs(title = "Lake temperature profiles of NTL_LTER lakes",
-                 x = "DO", y = "Depth (m)", color = "DOY") +
+            labs(title = "Dissolved oxygen profiles of NTL-LTER lakes",
+                 x = "Dissolved Oxygen (mg/L)", y = "Depth (m)", color = "DOY") +
             facet_wrap(~ lakename)
 #what are the units on DO? 
 

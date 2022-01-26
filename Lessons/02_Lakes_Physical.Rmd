@@ -134,12 +134,18 @@ In 1993, Paul Lake was sampled from May 20 through November 2. Let's look at tem
 ```{r}
 ggplot(subset(Pauldata, year4 == 1993), 
        aes(x = temperature_C, y = depth, color = daynum)) +
-  geom_point(alpha = 0.5) +
-  scale_y_reverse() +
-  scale_color_viridis_c() +
-  labs(x = expression("Temperature "(degree*C)), y = "Depth (m)", color = "DOY") 
+       geom_point(alpha = 0.5) +
+       scale_y_reverse() +
+       scale_color_viridis_c() +
+       labs(x = expression("Temperature "(degree*C)), y = "Depth (m)", color = "DOY")                  #'expression()' clause to get degree symbol
 
 # Now, make a plot as above but with dissolved oxygen saturation instead of temperature.
+ggplot(subset(Pauldata, year4 == 1993), #use 'subset()' to get a subset without creating distinct dataset
+       aes(x = dissolvedOxygen, y = depth, color = daynum)) +
+       geom_point(alpha = 0.5) +
+       scale_y_reverse() +
+       scale_color_viridis_c() +
+       labs(x = "Dissolved Oxygen (mg/L)", y = "Depth (m)", color = "DOY")
 
 
 ```
@@ -196,15 +202,21 @@ Let's explore how these changes might manifest in Paul Lake.
 ```{r}
 ggplot(Pauldata_thermo, aes(x = daynum, y = thermocline, color = year4)) +
   geom_point() +
-  scale_color_viridis_c()
+  scale_color_viridis_c() + 
 # exercise: put the legend on top and relabel the aesthetics
-
+  theme(legend.position = "top") + 
+  labs(x = "Day number", y = "Thermocline depth (m)") + 
+  scale_y_reverse()
+   
 ggplot(subset(Pauldata, depth == 1),
        aes(x = daynum, y = temperature_C, color = as.factor(year4))) +
   geom_point(alpha = 0.5) +
   geom_line() +
-  scale_color_viridis_d()
+  scale_color_viridis_d() +
 # exercise: relabel the aesthetics
+  labs(x = "Day number", y = expression("Temperature " (degree*C)))
+
+  
 
 ```
 

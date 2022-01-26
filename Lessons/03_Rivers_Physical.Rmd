@@ -64,11 +64,11 @@ We will be analyzing data from the following rivers/streams today:
 * Nehalem River in Oregon
 
 ```{r}
-EnoSummary <- whatNWISdata(siteNumbers = "02096500")
-VerdeSummary <- whatNWISdata(siteNumbers = "09504000")
-BitterrootSummary <- whatNWISdata(siteNumbers = "12344000")
-SaukSummary <- whatNWISdata(siteNumbers = "05270500")
-NehalemSummary <- whatNWISdata(siteNumbers = "14299800")
+HawSummary <- whatNWISdata(siteNumbers = "02096500") #NC
+VerdeSummary <- whatNWISdata(siteNumbers = "09504000") #AZ
+BitterrootSummary <- whatNWISdata(siteNumbers = "12344000") #MT
+SaukSummary <- whatNWISdata(siteNumbers = "05270500") #MN
+NehalemSummary <- whatNWISdata(siteNumbers = "14299800") #OR
 ```
 
 What data are available from the sites? Pay particular attention to the parameter codes and statistic codes.
@@ -77,7 +77,7 @@ What data are available from the sites? Pay particular attention to the paramete
 
 What is the period of record for mean daily discharge at each of these sites?
 
-> Eno River: 
+> Haw River: HawPoR <- HawSummary %>% mutate(periodOfRecord = end_date - begin_date)
 
 > Verde River: 
 
@@ -123,14 +123,14 @@ NehalemDischarge <- readNWISdv(siteNumbers = "14299800",
 ### Data Wrangling
 ```{r}
 
-# Renaming columns (one method of multiple)
+# Renaming columns (one method of multiple) - do before binding into a wide dataset
 names(EnoDischarge)[4:5] <- c("Eno.Discharge", "Eno.Approval.Code")
 names(VerdeDischarge)[4:5] <- c("Verde.Discharge", "Verde.Approval.Code")
 names(BitterrootDischarge)[4:5] <- c("Bitterroot.Discharge", "Bitterroot.Approval.Code")
 names(SaukDischarge)[4:5] <- c("Sauk.Discharge", "Sauk.Approval.Code")
 names(NehalemDischarge)[4:5] <- c("Nehalem.Discharge", "Nehalem.Approval.Code")
 
-# Remove agency_cd column from each data frame
+# Remove agency_cd (drop with -<col name>)column from each data frame
 EnoDischarge <- select(EnoDischarge, -agency_cd)
 VerdeDischarge <- select(VerdeDischarge, -agency_cd)
 BitterrootDischarge <- select(BitterrootDischarge, -agency_cd)
@@ -188,7 +188,9 @@ NehalemPlot
 
 CombinedPlot <- 
   plot_grid(EnoPlot, VerdePlot, BitterrootPlot, SaukPlot, NehalemPlot, 
-            ncol = 1)
+            ncol = 1, rel_heights = c(1, 1, 1, 1, 1.2), #use relative heights to make last one slight larger, as labels shrank it
+            align = "hv" #align horizontally & vertically
+            )
 CombinedPlot
 
 # add relative heights and align axes
