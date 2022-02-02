@@ -38,7 +38,7 @@ getwd() #should be the R project file
 library(tidyverse)
 library(lubridate)
 library(rLakeAnalyzer)
-library(wesanderson) #fun wes anderson inspitred color palettes: 
+library(wesanderson) #fun wes anderson inspired color palettes: 
 
 
 # Load dataset - NTL-LTER Physical 

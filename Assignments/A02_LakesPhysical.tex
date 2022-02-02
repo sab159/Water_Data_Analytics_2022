@@ -1,0 +1,410 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\title{Assignment 2: Physical Properties of Lakes}
+\author{Sophia Bryson}
+\date{}
+
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Assignment 2: Physical Properties of Lakes},
+  pdfauthor={Sophia Bryson},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=2.54cm]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\usepackage[normalem]{ulem}
+% Avoid problems with \sout in headers with hyperref
+\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\begin{document}
+\maketitle
+
+\hypertarget{overview}{%
+\subsection{OVERVIEW}\label{overview}}
+
+This exercise accompanies the lessons in Water Data Analytics on the
+physical properties of lakes.
+
+\hypertarget{directions}{%
+\subsection{Directions}\label{directions}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Change ``Student Name'' on line 3 (above) with your name.
+\item
+  Work through the steps, \textbf{creating code and output} that fulfill
+  each instruction.
+\item
+  Be sure to \textbf{answer the questions} in this assignment document.
+\item
+  When you have completed the assignment, \textbf{Knit} the text and
+  code into a single PDF file.
+\item
+  After completing your assignment, fill out the assignment completion
+  survey in \sout{Sakai} Google Survey link.
+\end{enumerate}
+
+Having trouble? See the assignment's answer key if you need a hint.
+Please try to complete the assignment without the key as much as
+possible - this is where the learning happens!
+
+Target due date: 2022-02-01 (updated 20 January 2022)
+
+\hypertarget{setup}{%
+\subsection{Setup}\label{setup}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Verify your working directory is set to the R project file,
+\item
+  Load the tidyverse, lubridate, and rLakeAnalyzer packages
+\item
+  Import the NTL-LTER physical lake dataset and set the date column to
+  the date format.
+\item
+  Using the \texttt{mutate} function, add a column called Month. Remove
+  temperature NAs.
+\item
+  Set your ggplot theme (can be theme\_classic or something else)
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Check working directory}
+\FunctionTok{getwd}\NormalTok{() }\CommentTok{\#should be the R project file}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "C:/Users/lenovo/Desktop/Duke/Spring 2022/ENV790/Water_Data_Analytics_2022"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load packages}
+\FunctionTok{library}\NormalTok{(tidyverse)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages --------------------------------------- tidyverse 1.3.1 --
+\end{verbatim}
+
+\begin{verbatim}
+## v ggplot2 3.3.5     v purrr   0.3.4
+## v tibble  3.1.3     v dplyr   1.0.7
+## v tidyr   1.1.3     v stringr 1.4.0
+## v readr   2.0.0     v forcats 0.5.1
+\end{verbatim}
+
+\begin{verbatim}
+## -- Conflicts ------------------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(lubridate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'lubridate'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     date, intersect, setdiff, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(rLakeAnalyzer)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'rLakeAnalyzer' was built under R version 4.1.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(wesanderson) }\CommentTok{\#fun wes anderson inspired color palettes: }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'wesanderson' was built under R version 4.1.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load dataset {-} NTL{-}LTER Physical }
+\NormalTok{NTLdata }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(}\StringTok{"./Data/Raw/NTL{-}LTER\_Lake\_ChemistryPhysics\_Raw.csv"}\NormalTok{)}
+
+\CommentTok{\# Data prep}
+   \CommentTok{\# Format date column}
+\NormalTok{   NTLdata}\SpecialCharTok{$}\NormalTok{sampledate }\OtherTok{\textless{}{-}} \FunctionTok{as.Date}\NormalTok{(NTLdata}\SpecialCharTok{$}\NormalTok{sampledate, }\AttributeTok{format =} \StringTok{"\%m/\%d/\%y"}\NormalTok{)}
+
+   \CommentTok{\# Add month column}
+\NormalTok{   NTLdata }\OtherTok{\textless{}{-}}\NormalTok{ NTLdata }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{mutate}\NormalTok{(}\AttributeTok{month =} \FunctionTok{month}\NormalTok{(sampledate))}
+   
+   \CommentTok{\# remove temperature NAs}
+\NormalTok{   NTLdata }\OtherTok{\textless{}{-}}\NormalTok{ NTLdata }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{drop\_na}\NormalTok{(temperature\_C)}
+   
+\CommentTok{\# Set ggplot theme}
+\FunctionTok{theme\_set}\NormalTok{(}\FunctionTok{theme\_minimal}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{creating-and-analyzing-lake-temperature-profiles}{%
+\subsection{Creating and analyzing lake temperature
+profiles}\label{creating-and-analyzing-lake-temperature-profiles}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{4}
+\tightlist
+\item
+  For the year 1993, plot temperature and dissolved oxygen profiles for
+  all six lakes in the dataset (as two separate ggplots). Use the
+  \texttt{facet\_wrap} function to plot each lake as a separate panel in
+  the plot. Plot day of year as your color aesthetic and use a reverse y
+  scale to represent depth.
+\end{enumerate}
+
+What seasonal trends do you observe, and do these manifest differently
+in each lake?
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lakes\_temp }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{subset}\NormalTok{(NTLdata, year4 }\SpecialCharTok{==} \DecValTok{1993}\NormalTok{), }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ temperature\_C, }\AttributeTok{y =}\NormalTok{ depth, }\AttributeTok{color =}\NormalTok{ daynum)) }\SpecialCharTok{+}
+              \FunctionTok{scale\_y\_reverse}\NormalTok{() }\SpecialCharTok{+}
+              \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+} 
+              \FunctionTok{scale\_color\_viridis\_c}\NormalTok{() }\SpecialCharTok{+} 
+              \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Temperature profiles of NTL{-}LTER lakes"}\NormalTok{,}
+                   \AttributeTok{x =} \StringTok{"Temperature (C)"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Depth (m)"}\NormalTok{, }\AttributeTok{color =} \StringTok{"DOY"}\NormalTok{) }\SpecialCharTok{+}
+              \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ lakename)}
+
+\NormalTok{lakes\_temp}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{A02_LakesPhysical_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lakes\_DO }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{subset}\NormalTok{(NTLdata, year4 }\SpecialCharTok{==} \DecValTok{1993}\NormalTok{), }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ dissolvedOxygen, }\AttributeTok{y =}\NormalTok{ depth, }\AttributeTok{color =}\NormalTok{ daynum)) }\SpecialCharTok{+}
+            \FunctionTok{scale\_y\_reverse}\NormalTok{() }\SpecialCharTok{+}
+            \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+} 
+            \FunctionTok{scale\_color\_viridis\_c}\NormalTok{() }\SpecialCharTok{+} 
+            \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Dissolved oxygen profiles of NTL{-}LTER lakes"}\NormalTok{,}
+                 \AttributeTok{x =} \StringTok{"Dissolved Oxygen (mg/L)"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Depth (m)"}\NormalTok{, }\AttributeTok{color =} \StringTok{"DOY"}\NormalTok{) }\SpecialCharTok{+}
+            \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{ lakename)}
+
+\NormalTok{lakes\_DO}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 8 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{A02_LakesPhysical_files/figure-latex/unnamed-chunk-3-1.pdf}
+Seasonal trends are evident in the temperature and dissolved oxygen
+profiles of the lakes throughout the year in 1993, with differences
+observable both within individual lakes across the seasons and between
+the various lakes. Temperatures overall are higher in the warmer midyear
+months, and stratification is most pronounced during this time.
+Temperatures overall are cooler in the late fall, winter, and early
+spring, with stratification disappearing entirely in lakes where late
+season measurements are reported. Trends in dissolved oxygen are
+similar, though DO does not go to zero when stratification gives way to
+mixing. The pronouncement of the deep chlorophyll later appears to
+decrease throughout the year as stratification weakens.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Create a new dataset that calculates thermocline depths for all lakes
+  on all dates (hint: you will need group by lake, year, month, DOY, and
+  sample date).
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{thermocline\_depths }\OtherTok{\textless{}{-}}\NormalTok{ NTLdata }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{group\_by}\NormalTok{(lakename, year4, month, daynum, sampledate) }\SpecialCharTok{\%\textgreater{}\%}
+                                  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{thermocline =} \FunctionTok{thermo.depth}\NormalTok{(}\AttributeTok{wtr =}\NormalTok{ temperature\_C, }\AttributeTok{depths =}\NormalTok{ depth, }\AttributeTok{seasonal =} \ConstantTok{FALSE}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+                                  \FunctionTok{filter}\NormalTok{(thermocline }\SpecialCharTok{\textgreater{}} \DecValTok{1}\NormalTok{) }\CommentTok{\#drop thermoclines within 1m of surface {-}likely resulting from transient stratification due to solar warming. }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## `summarise()` has grouped output by 'lakename', 'year4', 'month', 'daynum'. You can override using the `.groups` argument.
+\end{verbatim}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{6}
+\tightlist
+\item
+  Plot thermocline depth by day of year for your newly made dataset.
+  Color each point by lake name, make the points 50\% transparent, and
+  choose a color palette other than the ggplot default.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{thermocline\_plot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(thermocline\_depths, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ daynum, }\AttributeTok{y =}\NormalTok{ thermocline, }\AttributeTok{color =}\NormalTok{ lakename)) }\SpecialCharTok{+} 
+                    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+                    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(wes\_palettes}\SpecialCharTok{$}\NormalTok{Darjeeling1, wes\_palettes}\SpecialCharTok{$}\NormalTok{Darjeeling2)) }\SpecialCharTok{+} 
+                    \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Thermocline depth of LTER lakes"}\NormalTok{, }\AttributeTok{x =} \StringTok{"DOY"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Thermocline depth (m)"}\NormalTok{) }
+                    
+\NormalTok{thermocline\_plot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{A02_LakesPhysical_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{7}
+\tightlist
+\item
+  Create a boxplot of thermocline depth distributions split up by lake
+  name on the x axis and by month as the fill color (hint: you will need
+  to set Month as a factor). Choose a color palette other than the
+  ggplot default, relabel axes and legend, and place the legend on the
+  top of the graph.
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{thermo\_boxplot }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(thermocline\_depths, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ lakename, }\AttributeTok{y =}\NormalTok{ thermocline, }\AttributeTok{fill =} \FunctionTok{as.factor}\NormalTok{(month))) }\SpecialCharTok{+}
+                  \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+} 
+                  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(wes\_palettes}\SpecialCharTok{$}\NormalTok{Royal1, wes\_palettes}\SpecialCharTok{$}\NormalTok{Moonrise2)) }\SpecialCharTok{+} 
+                  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Thermocline depth of LTER lakes"}\NormalTok{, }\AttributeTok{x =} \StringTok{"Lake name"}\NormalTok{, }\AttributeTok{y =} \StringTok{"Thermocline depth (m)"}\NormalTok{, }\AttributeTok{fill =} \StringTok{"Numeric month"}\NormalTok{) }\SpecialCharTok{+}
+                  \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.position =} \StringTok{"top"}\NormalTok{, }\AttributeTok{legend.direction =} \StringTok{"horizontal"}\NormalTok{) }\CommentTok{\#how to get this aligned more nicely?? }
+
+\NormalTok{thermo\_boxplot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{A02_LakesPhysical_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+Do all the lakes have a similar seasonal progression of thermocline
+deepening? Which lakes have the deepest thermoclines, and how does this
+relate to their maximum depth?
+
+\begin{quote}
+While the relative positions of the thermocline at different points in
+the year are similar across lakes (deepest in later months), the actual
+depth and rate of change differ between lakes and between years. The
+deepest thermoclines are, unsurprisingly, found in the deepest lakes,
+including Peter and Crampton lakes.
+\end{quote}
+
+\end{document}
