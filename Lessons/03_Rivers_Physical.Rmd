@@ -154,6 +154,7 @@ EnoPlot <-
   theme(plot.title = element_text(margin = margin(b = -10), size = 12), 
         axis.text.x = element_blank(), axis.title.x = element_blank())
 EnoPlot
+# Low seasonality, largely driven by distinct precipitation events - Eno
 
 VerdePlot <- 
   ggplot(CombinedDischarge, aes(x = Date, y = Verde.Discharge)) +
@@ -162,6 +163,7 @@ VerdePlot <-
   theme(plot.title = element_text(margin = margin(b = -10), size = 12), 
         axis.text.x = element_blank(), axis.title.x = element_blank())
 VerdePlot
+# Ephemeral river - very arid, little flow
 
 BitterrootPlot <- 
   ggplot(CombinedDischarge, aes(x = Date, y = Bitterroot.Discharge)) +
@@ -170,6 +172,7 @@ BitterrootPlot <-
   theme(plot.title = element_text(margin = margin(b = -10), size = 12), 
         axis.text.x = element_blank(), axis.title.x = element_blank())
 BitterrootPlot
+# Mountain west river, with high snowmelt signal (annual spring peak) & high gradient drainage
 
 SaukPlot <- 
   ggplot(CombinedDischarge, aes(x = Date, y = Sauk.Discharge)) +
@@ -178,6 +181,7 @@ SaukPlot <-
   theme(plot.title = element_text(margin = margin(b = -10), size = 12), 
         axis.text.x = element_blank(), axis.title.x = element_blank())         
 SaukPlot
+# Some seasonal signalling, less flashy than Eno
 
 NehalemPlot <- 
   ggplot(CombinedDischarge, aes(x = Date, y = Nehalem.Discharge)) +
@@ -185,6 +189,7 @@ NehalemPlot <-
   labs(x = "", y = expression("Discharge (ft"^3*"/s)"), title = "Nehalem River") + 
   theme(plot.title = element_text(margin = margin(b = -10), size = 12))
 NehalemPlot
+# Small watershed, seasonal signals of wet & dry seasons (winter, rather than spring, peak) with moderation from Pacific ocean. Some flashiness from land use conversion
 
 CombinedPlot <- 
   plot_grid(EnoPlot, VerdePlot, BitterrootPlot, SaukPlot, NehalemPlot, 
@@ -213,7 +218,7 @@ Let's take the Bitterroot River, which displays a clear seasonal cycle. Let's de
 ```{r}  
 BitterrootDischarge.Historical <- readNWISdv(siteNumbers = "12344000",
                      parameterCd = "00060", # discharge (ft3/s)
-                     startDate = "")
+                     startDate = "") #blank start date grabs full period of record
 
 names(BitterrootDischarge.Historical)[4:5] <- c("Discharge", "Approval.Code")
 
@@ -222,7 +227,7 @@ BitterrootDischarge.Historical <- mutate(BitterrootDischarge.Historical,
 
 BitterrootDischarge.Pattern <- BitterrootDischarge.Historical %>%
   group_by(DOY) %>%
-  summarise(Median.Discharge = median(Discharge), 
+  summarise(Median.Discharge = median(Discharge, na.rm = TRUE), 
             p95.Discharge = quantile(Discharge, 0.95, na.rm = TRUE),
             p5.Discharge = quantile(Discharge, 0.05, na.rm = TRUE))
 

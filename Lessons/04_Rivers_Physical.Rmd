@@ -16,12 +16,14 @@ editor_options:
 ## Opening Discussion
 How is climate change impacting discharge in streams and rivers? What are the new and ongoing challenges faced by these impacts in watersheds?
 
+> Climate change will alter the timing & magnitude of precipitation events, as well as the type of precipitation. Temperature changes may also alter evapotranpiration and the amount of water reaching rivers & streams
+
 ## Session Set Up
 
 ```{r, message = FALSE}
 getwd()
 
-# install.packages("lfstat")
+#install.packages("lfstat")
 
 library(tidyverse)
 library(dataRetrieval)
@@ -29,7 +31,7 @@ library(lubridate)
 library(lfstat)
 
 
-theme_set(theme_classic())
+theme_set(theme_minimal())
 ```
 
 ## Recurrence Intervals and Exceededence Probability
@@ -53,8 +55,8 @@ Let's import discharge data for the Eno River near Durham for all available date
 ```{r}
 EnoDischarge <- readNWISdv(siteNumbers = "02085070",
                      parameterCd = "00060", # discharge (ft3/s)
-                     startDate = "", 
-                     endDate = "2021-09-30")
+                     startDate = "", #earliest available period of record
+                     endDate = "2021-09-30") #end of water year (Oct to Sept)
 
 names(EnoDischarge)[4:5] <- c("Discharge", "Approval.Code")
 
@@ -73,7 +75,7 @@ We can then compute recurrence intervals based on the first 30 years of data.
 EnoDischarge <- EnoDischarge %>%
   mutate(Year = year(Date), 
          WaterYear = water_year(Date, origin = "usgs")) %>%
-  filter(WaterYear != "1963")
+  filter(WaterYear != "1963") #dropping incomplete initial water year (only 30 days before water year 1964 begins)
 
 # Water Year is a factor. We want to re-classify as numeric.
 EnoDischarge$WaterYear <- as.numeric(as.character(EnoDischarge$WaterYear))
@@ -98,8 +100,11 @@ Let's display and model the relationship between peak annual disharge and recurr
 ggplot(EnoRecurrence, aes(x = RecurrenceInterval, y = PeakDischarge)) +
   geom_point() +
   scale_x_log10() +
-  geom_smooth(method = "lm")
+  geom_smooth(method = "lm") #can also specify "color = " and whether or not to include error bar (se = FALSE)
+#decent fit in the middle, less fit at upper and lower limits
 
+
+#Linear model, from which we can extract summary
 Eno.RImodel <- lm(data = EnoRecurrence, PeakDischarge ~ log10(RecurrenceInterval))
 summary(Eno.RImodel)
 
