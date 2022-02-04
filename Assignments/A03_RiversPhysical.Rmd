@@ -78,33 +78,72 @@ MysterySiteDischarge.pattern <- MysterySiteDischarge %>%
                                           p25.Discharge = quantile(Discharge, 0.25, na.rm = TRUE))
 
 # 6 - plot
-ggplot(MysterySiteDischarge.pattern, aes(x = DayOfYear)) +
-       geom_line(aes(y = Median.Discharge)) +
-       geom_line(aes(y = p75.Discharge), color = "gray") +
-       geom_line(aes(y = p25.Discharge), color = "gray") +  
-       labs(x = "Day of Year", y = "Discharge (cfs)") 
+DOYDischarge <- ggplot(MysterySiteDischarge.pattern, aes(x = DayOfYear)) +
+                       geom_line(aes(y = Median.Discharge)) +
+                       geom_line(aes(y = p75.Discharge), color = "gray") +
+                       geom_line(aes(y = p25.Discharge), color = "gray") +  
+                       labs(x = "Day of Year", y = "Discharge (cfs)") 
+DOYDischarge
 
 ```
 
 7. What seasonal patterns do you see? What does this tell you about precipitation patterns and climate in the watershed?
 
-> Preipitation is higher from the late fall/early winter through the spring. This seasonal pattern suggests a climatic region with a wet and dry season distinction (rather than snowmelt). 
+> Precipitation is higher from the late fall/early winter through the spring. This seasonal pattern suggests a climatic region with a wet and dry season distinction (rather than snowmelt). 
 
 ## Create and analyze recurrence intervals
 
-8. Create two separate data frames for MysterySite.Annual.30yr (first 30 years of record) and MysterySite.Annual.Full (all years of record). Use a pipe to create your new data frame(s) that includes the water year, the peak discharge observed in that year, a ranking of peak discharges, the recurrence interval, and the exceedende probability.
+8. Create two separate data frames for MysterySite.Annual.30yr (first 30 years of record) and MysterySite.Annual.Full (all years of record). Use a pipe to create your new data frame(s) that includes the water year, the peak discharge observed in that year, a ranking of peak discharges, the recurrence interval, and the exceedence probability.
 
 9. Create a plot that displays the discharge vs. recurrence interval relationship for the two separate data frames (one set of points includes the values computed from the first 30 years of the record and the other set of points includes the values computed for all years of the record. 
 
 10. Create a model to predict the discharge for a 100-year flood for both sets of recurrence intervals. 
 
 ```{r}
+# Data frames with annual peak discharges, recurrence interval, and exceedence probability
 
+recordStart <- min(MysterySiteDischarge$Year) 
+startYear <- recordStart #can add one if first year is incomplete and needs to be omitted
+year30 <- startYear + 30
+
+MysterySite.Annual.30yr <- MysterySiteDischarge %>%
+                           filter(WaterYear >= startYear & WaterYear <= year30) %>% 
+                           group_by(WaterYear) %>% 
+                           summarise(PeakDischarge = max(Discharge)) %>%
+                           mutate(Rank = rank(-PeakDischarge),
+                                  RecurrenceInterval = (length(WaterYear) + 1)/ Rank,
+                                  ExcProbability = 1/RecurrenceInterval)
+
+MysterySite.Annual.Full <- MysterySiteDischarge %>%
+                           group_by(WaterYear) %>% 
+                           summarise(PeakDischarge = max(Discharge)) %>%
+                           mutate(Rank = rank(-PeakDischarge),
+                                  RecurrenceInterval = (length(WaterYear) + 1)/ Rank,
+                                  ExcProbability = 1/RecurrenceInterval)
+
+# Plot discharge vs recurrence interval for each df
+recurrenceComparison <- ggplot() + 
+                        geom_point(data = MysterySite.Annual.30yr, aes(x = RecurrenceInterval, y = PeakDischarge), color = "cadetblue") + 
+                        geom_smooth(data = MysterySite.Annual.30yr, aes(x = RecurrenceInterval, y = PeakDischarge), 
+                                    method = "lm", color = "cadetblue1", alpha = 0.5) + 
+                        geom_point(data = MysterySite.Annual.Full, aes(x = RecurrenceInterval, y = PeakDischarge), color = "tomato") +
+                        geom_smooth(data = MysterySite.Annual.Full, aes(x = RecurrenceInterval, y = PeakDischarge), 
+                                    method = "lm", color = "tomato1", alpha = 0.5) + 
+                        labs(x = "Recurrence Interval (years)", y = "Annual Peak Discharge (cfs)")
+
+# Model  100-year flood discharge for both datasets
+   # First 30 years of record
+   RIModel_30 <- lm(data = MysterySite.Annual.30yr, PeakDischarge ~ log10(RecurrenceInterval)) #modeled relationship
+   RIModel_30$coefficients[1] + RIModel_30$coefficients[2]*log10(100) #calculated discharge for 100 year flood 
+
+   # Full length of record
+   RIModel_Full <- lm(data = MysterySite.Annual.Full, PeakDischarge ~ log10(RecurrenceInterval))
+   RIModel_Full$coefficients[1] + RIModel_Full$coefficients[2]*log10(100) #calculated discharge for 100 year flood 
 
 ```
 
 11. How did the recurrence interval plots and predictions of a 100-year flood differ among the two data frames? What does this tell you about the stationarity of discharge in this river?
 
-> 
+> The discharge associated with the 100 year flood event is slightly lower (by 770.5 cfs, a 13% decrease compared with the 30-year window) for the full period of record as compared with just the first 30 years of the record. This relatively low magnitude decrease suggests that the discharge has not changed susbstantially and that stationarity appears to remain a valid assumption for this river. While the change could indicate a slight decrease in discharge, it is also sufficiently minor that it could simply be an artifact of taking a longer timescale which captures more of the natural variability inherent in the system.  
 
 

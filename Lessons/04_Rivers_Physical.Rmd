@@ -145,11 +145,11 @@ Eno.RImodel$coefficients[1] + Eno.RImodel$coefficients[2]*log10(500)
 
 What differences did you see for the recurrence intervals built under different periods of record? How would your prediction of flood events differ if you were to use these models for forecasting purposes? 
 
->
+> At high discharges, the models diverge, indicating that higher magnitude discharge events are occurring with greater frequency in recent years. 
 
 What would you recommend for a watershed manager seeking to build the most accurate recurrence interval model for the Eno River?
 
-> 
+> Use rolling 30 year windows to assess recurrence intervals  
 
 
 ### Examining the effects of urbanization on discharge
