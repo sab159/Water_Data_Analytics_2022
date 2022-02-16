@@ -27,9 +27,10 @@ library(lubridate)
 library(LAGOSNE)
 
 theme_set(theme_classic())
-options(scipen = 100)
+options(scipen = 100) #sets number of digits to report before resorting to scientific notation
 
-lagosne_get(dest_folder = LAGOSNE:::lagos_path(), overwrite = TRUE)
+lagosne_get(dest_folder = LAGOSNE:::lagos_path(), overwrite = TRUE) #downloads lagos NE database to local machine
+# linked database with variety of datasets. 
 
 ```
 
@@ -72,9 +73,11 @@ For example, let's find out how many lakes are in each state. Note that LAGOSloc
 # Join data frames
 LAGOSlocations <- left_join(LAGOSlocus, LAGOSstate, by = "state_zoneid")
 
+#number of lakes per state
 ggplot(LAGOSlocations, aes(x = state)) + 
   geom_bar(stat = "count")
 
+#size of lakes by state
 ggplot(LAGOSlocations, aes(x = state, y = lake_area_ha)) + 
   geom_boxplot() +
   scale_y_log10()
@@ -122,7 +125,7 @@ Let's look at observations of chl, secchi depth, and TP seasonally and over the 
 Add a line of code to facet the graphs by state.
 ```{r}
 ggplot(LAGOStrophic, aes(x = as.factor(samplemonth), y = chla)) +
-  geom_jitter(alpha = 0.2, size = 0.5) +
+  geom_jitter(alpha = 0.2, size = 0.5) + #this spaces the points out to allow better visibility of sample size & dsitribution
   geom_boxplot(outlier.shape = NA, color = "#1f968b", fill = NA) +
   scale_y_log10() +
   labs(x = "Month", y = expression("Chl a ("*mu*"g/L)"))
@@ -135,9 +138,9 @@ ggplot(LAGOStrophic, aes(x = as.factor(samplemonth), y = secchi)) +
 
 ggplot(LAGOStrophic, aes(x = as.factor(samplemonth), y = tp)) +
   geom_jitter(alpha = 0.2, size = 0.5) +
-  geom_boxplot(outlier.shape = NA, color = "#1f968b", fill = NA) +
+  geom_boxplot(outlier.shape = NA, color = "salmon", fill = NA) +
   scale_y_log10() +
-  labs(x = "Month", y = expression("TP ("*mu*"g/L)"))
+  labs(x = "Month", y = expression("TP ("*mu*"g/L)")) #tp may not capture shifts between fractions
 ```
 
 What do you notice about the seasonality of these variables? If we were to characterize a lake based on the value of a given variable, how might seasonality affect our interpretations?
