@@ -25,7 +25,7 @@ library(LAGOSNE)
 #install.packages("corrplot")
 library(corrplot)
 
-theme_set(theme_classic())
+theme_set(theme_minimal())
 options(scipen = 4)
 
 ```
@@ -116,8 +116,26 @@ Exercise:
 8. Create a linear model to evaluate the chlorophyll-TP relationship, with HUC 4 code as an interaction effect. Is it important to account for the HUC 4 code in the model? How might this classification impact potential nutrient management?
 
 ```{r}
+LAGOSMN <- LAGOSjoined %>% left_join(.,LAGOSdata$hu4) %>% 
+                           select(lagoslakeid, sampledate, state_name, hu4, chla, tn, tp) %>%
+                           mutate(year = year(sampledate),
+                                  month = month(sampledate)) %>%
+                           filter(state_name == "Minnesota",
+                                  month %in% c(6:9),
+                                  year >= 1990) %>%
+                           filter(hu4 %in% c("0401", "0701", "0702", "0703", "0704", "0902"))
 
+ggplot(LAGOSMN, aes(x = tp, y = chla)) +
+       geom_point(alpha = 0.1) +
+       geom_smooth(method = "lm", se = FALSE) +
+       facet_wrap(vars(hu4), ncol = 3) +
+       scale_y_log10() +
+       scale_x_log10() +
+       labs(x = expression("TP ("*mu*"g/L)"), y = expression("Chl a ("*mu*"g/L"))
 
+StressorResponseRelationship <- lm(data=LAGOSMN, chla ~ log10(tp) * hu4)
+summary(StressorResponseRelationship)
+#indicated different stressor response by classes
 ```
 
 ## Covariates

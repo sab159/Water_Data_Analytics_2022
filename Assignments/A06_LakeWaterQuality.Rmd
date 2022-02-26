@@ -1,6 +1,6 @@
 ---
 title: "Assignment 6: Water Quality in Lakes"
-author: "Student Name"
+author: "Sophia Bryson"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
@@ -31,6 +31,13 @@ Target due date: 2022-03-01
 [Water Quality Portal Web Services Guide](https://www.waterqualitydata.us/webservices_documentation/)
 
 ```{r setup}
+getwd()
+
+library(tidyverse)
+library(lubridate)
+library(dataRetrieval)
+
+theme_set(theme_minimal())
 
 NCdata <- readWQPdata(statecode = "North Carolina", 
                       siteType = "Lake, Reservoir, Impoundment", 
@@ -55,7 +62,7 @@ General data processing and quality assurance considerations:
 *  **MeasureQualifierCode** Contains information about data flags: 
 
   * *U* designates below detection limit (action: set value to 1/2 detection or quantitation limit from **DetectionQuantitationLimitMeasure.MeasureValue**)
-  * *J* designates above detection limit but below quantitation limit (action: retain value)
+  * *J* designates above detection limit but below quantification limit (action: retain value)
   * Other codes may designate suspect data or other flags which may be described in detail in **ResultLaboratoryCommentText** or another column
 
 
@@ -74,6 +81,8 @@ ActivityConductingOrganizationText, MonitoringLocationIdentifier, Depth, ResultM
 
   
 ```{r}
+
+class(NCdata$ActivityStartDate) #already a date, no need to change or cast
 
 # Look into what forms and units phosphorus and chlorophyll have. 
 # Note that chlorophyll is always suspended, so the form isn't crucial.
@@ -107,9 +116,35 @@ NCdata_processed <- NCdata %>%
                                         TRUE ~ ResultMeasureValue)) %>%
   drop_na(Variable, ResultMeasureValue, Depth_m)
   
+# Format and summarize cleaned data
+NCdata_summary <- NCdata_processed %>% select(OrganizationIdentifier, OrganizationFormalName, 
+                                              ActivityStartDate, ActivityConductingOrganizationText,
+                                              MonitoringLocationIdentifier,
+                                              Depth_m, ResultMeasureValue, Variable) %>%
+                                       group_by(OrganizationIdentifier, OrganizationFormalName, 
+                                                ActivityStartDate, ActivityConductingOrganizationText,
+                                                MonitoringLocationIdentifier,
+                                                Depth_m, Variable) %>%
+                                       summarise(meanResultValue = mean(ResultMeasureValue, na.rm = TRUE)) %>%
+                                       pivot_wider(names_from = Variable, 
+                                                   values_from = meanResultValue) %>%
+                                       mutate(Month = month(ActivityStartDate), 
+                                              Year = year(ActivityStartDate)) %>%
+                                       filter(Month %in% seq(5, 10, 1)) %>%   
+                                       filter(Depth_m <= 1)
 
+#Now plotthe clorophyll-TP stressor-response relationship, with a linear model of the relationship and adjusted axes
+Chl_TP_stressorResponse.plot <- ggplot(NCdata_summary, aes(x = TP_mgL, y = Chla_ugL)) +
+                                geom_point(alpha = 0.4, color = "navyblue") +
+                                geom_smooth(method = lm, se = FALSE, color = "indianred") + 
+                                scale_x_log10() + 
+                                scale_y_log10() + 
+                                labs(title = "Chlorophyll-A - Total Phosphorus stressor response relationship",
+                                     x = "Total Phosphorus (mg/L)",
+                                     y = "Chlorophyll-A (ug/L)")
+Chl_TP_stressorResponse.plot
 ```
   
 6. How might you expect this stressor-response relationship to change (or not) across the Mountains, Piedmont, and Coastal Plain regions of the state? How might you anticipate natural lakes might behave differently than reservoirs?
 
-> 
+> This stressor repsonse relationship indicates that the chlorophyll-A concentration in the epilimnion of NC lakes increases as the TP concentration increases. However, the spread of points around the regression line indicates that there is not a perfect correlation between phosophorus and chlorophyll across all the lakes and reservoirs of North Carolina. Rather, the severity of adverse impacts arising from chlorophyll inputs varies. This could arise from the existence of other factors that either limit or augment algal (and, accordingly, chlorophyll) concentrations in the lakes. These factors could include other nutrient concentrations (likely to be higher in the piedmont due to agricultural land uses), temperature (likely to be lower in the mountains due to elevation), and overall ecosystem structure (with macrophyte-heavy lakes having a lower concentration of chlorophyll relative to their phosohorus content than others). This last explanation could be the most slaient in consdiering the differences between natural lakes and reservoirs. The rate of through-flow of water could also affect the growth response of algae relative to phophorus, with the higher possibility for high rates of flow through lakes at elevation perhaps reducing the chlorophyll concentration relative to phosphous in mountain lakes, and the manual control of reservoirs affecting the patterns of reservoirs. 
