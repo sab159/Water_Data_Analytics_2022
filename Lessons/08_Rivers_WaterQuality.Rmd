@@ -22,7 +22,7 @@ library(tidyverse)
 library(lubridate)
 library(dataRetrieval)
 
-theme_set(theme_classic())
+theme_set(theme_minimal())
 options(scipen = 4)
 
 ```
@@ -183,6 +183,21 @@ Exercise:
 
 ```{r}
 
+# fecal coliform by hydrologic condition
+ggplot(NeuseWQFlow_processed, aes(x = HydrologicCondition, y = FecalColiform_cfu.100mL)) +
+   geom_boxplot(outlier.shape = NA) + 
+   scale_y_continuous(limits = c(0, 1000)) +
+   labs(title = "Fecal coliform by hydrologic condition", 
+        x = "Hydrologic Condition", y = "Fecal Coliform (cfu/100 mL)") +
+   geom_jitter(alpha = 0.4, color = "olivedrab4")
+
+# specific conductivity by hydrologic condition
+ggplot(NeuseWQFlow_processed, aes(x = HydrologicCondition, y = SpC_uS.cm)) +
+   geom_boxplot(outlier.shape = NA) + 
+   scale_y_continuous(limits = c(0, 250)) +
+   labs(title = "Specific conductivity by hydrologic condition", 
+        x = "Hydrologic Condition", y = "Specific Conductivity (us/cm)") +
+   geom_jitter(alpha = 0.4, color = "peru")
 
 ```
 

@@ -21,7 +21,7 @@ library(tidyverse)
 library(lubridate)
 library(dataRetrieval)
 
-theme_set(theme_classic())
+theme_set(theme_minimal())
 ```
 
 ## Time Series Analysis
@@ -67,18 +67,33 @@ names(NeuseFlow)[4:5] <- c("Discharge", "Approval.Code")
 # Plot discharge over time
 ggplot(NeuseFlow, aes(x = Date, y = Discharge)) +
   geom_line() +
-  labs(x = "", y = "Discharge (cfs)")
+  labs(x = "", y = "Discharge (cfs)") +
+  geom_smooth(method = "lm", color = "red")
 
 
 ```
 
-How would you characterize the time series of discharge and conductivity at this location? Do you see a linear trend over time? What factors might you need to take into account to be able to detect a trend or forecast future conditions?
+How would you characterize the time series of discharge at this location? Do you see a linear trend over time? What factors might you need to take into account to be able to detect a trend or forecast future conditions?
 
->
+> The noise makes it difficult to detect any strong trend over time. The seasonality of the discharge could be an important consideration for making comparisons and precdictions. The occurrence of high peaks appears to be increasing, which could be a systemic or random trend. It is harder to discern if lower high peaks are also following this trend. Any specific events that may have impacted discharge (ex. changes to hydrologic regime, etc.) oculd be wroth noting. 
+
+> Changing to a log scale could also show more discernibly if changes are occurring: 
+
+```{r}
+
+# Plot discharge over time
+ggplot(NeuseFlow, aes(x = Date, y = Discharge)) +
+  geom_line() +
+  labs(x = "", y = "Discharge (cfs)") +
+  scale_y_log10() +
+  geom_smooth(method = "lm", color = "red")
+
+```
+
 
 Are there situations where it would be appropriate to use a linear regression to model a time series? If so, what is an example?
 
->
+> In the above example, a linear trend isn't a great fit. A linear regression model may be better for datasets where seasonal variability is not present or change occurs more gradually. 
 
 
 ## Decomposing a time series dataset
@@ -97,6 +112,10 @@ Note: time series objects must be equispaced, which requires interpolation if th
 
 Neuse_ts <- ts(NeuseFlow[[4]], frequency = 365)
 
+# Double brackets as coding convention for accessing 4th row
+#data must be equal interval and without NAs
+# Frequency is occurrences per year
+
 ```
 
 The `stl` function decomposes the time series object into its component parts. We must specify that the window for seasonal extraction is either "periodic" or a specific number of at least 7. The decomposition proceeds through a loess (locally estimated scatterplot smoothing) function.
@@ -108,6 +127,8 @@ Neuse_Decomposed <- stl(Neuse_ts, s.window = "periodic")
 
 # Visualize the decomposed series. 
 plot(Neuse_Decomposed)
+# side bar shows difference in scale between datasets
+# lots of high flow events in the remainder (not in the trend)
 
 # We can extract the components and turn them into data frames
 Neuse_Components <- as.data.frame(Neuse_Decomposed$time.series[,1:3])
@@ -122,6 +143,7 @@ ggplot(Neuse_Components) +
   geom_hline(yintercept = 0, lty = 2) +
   labs(x = "", y = "Discharge (cfs)")
 
+
 # Visualize how the seasonal cycle maps onto the data
 ggplot(Neuse_Components) +
   geom_line(aes(y = Observed, x = Date), color = "gray") +
@@ -132,6 +154,8 @@ ggplot(Neuse_Components) +
 ```
 
 Note that the decomposition can yield negative values when we apply a seasonal adjustment or a trend adjustment to the data. The decomposition is not constrained by a lower bound of zero as discharge is in real life. Make sure to interpret with caution!
+
+> Lack or presence of negative trend values is an artifact of the methodology. 
 
 
 
@@ -147,6 +171,7 @@ NeuseCond <- readWQPqw(siteNumbers = "USGS-02089500", # Neuse River at Kinston, 
 # Plot conductivity over time
 ggplot(NeuseCond, aes(x = ActivityStartDate, y = ResultMeasureValue)) +
   geom_point()
+
 ```
 
 It is important to visualize your time series before moving forward with any test. In this case, we notice a few things: 
@@ -160,9 +185,9 @@ We see that conductivity data were collected approximately monthly across the sa
 
 Common interpolation methods: 
 
-* **Piecewise constant**: <fill in notes here>
-* **Linear**: <fill in notes here>
-* **Spline**: <fill in notes here>
+* **Piecewise constant**: "Nearest neighbor" - fill with preceding value
+* **Linear**: "Connect the dots" - connect neighboring values with linear model
+* **Spline**: Quadratic formulas to define values
 
 Linear interpolation is most common for water quality data, and fits with our understanding about how conductivity might change over time in this system. 
 
@@ -183,7 +208,7 @@ NeuseCond_monthly <- left_join(Months, NeuseCond_processed)
 # Generate monthly values from October 1980 to December 2021
 linearinterpolation <- as.data.frame(approx(NeuseCond_monthly$Conductivity, n = 566, method = "linear"))
 NeuseCond_monthly$Conductivity <- linearinterpolation$y
-
+#need to pull in values - created as a separate dataframe
 ```
 
 ### Exercise: decompose the conductivity time series
@@ -192,7 +217,19 @@ NeuseCond_monthly$Conductivity <- linearinterpolation$y
 3. Analyze the decomposed time series. Is there distinct seasonality? How does the magnitude of seasonality compare to the trend and random components of the time series? What are some caveats that need to be considered for the gap between October 2001 through February 2007?
 
 ```{r}
+# Create time series
+   cond.ts <- ts(NeuseCond_monthly$Conductivity, frequency = 12)
+
+# Decompose & plot the time series
+   cond.decomp <- stl(cond.ts, s.window = "periodic")
+   plot(cond.decomp)
+
+   cond.comp <- as.data.frame(cond.decomp$time.series[,1:3])
+   cond.comp <- mutate(cond.comp,
+                       Observed = NeuseCond_monthly$Conductivity,     
+                       Date = NeuseCond_monthly$Date)
+
 
 ```
 
-
+ > The magnitude of the seasonality is about one tenth of the total variability present in the data. The model suffers at the 6 year gap in the data, as a linear model is too simple. A splicing of modelled data based on the decomposition could more accurately model the missing data. 
